@@ -21,3 +21,6 @@ If it's left empty, guests only see the thank-you message.
 ## Edit
 - Event date/time: `EVENT_DATE` in `index.html`.
 - All text is plain HTML in `index.html`.
+
+## Photo gallery (optional)
+Add up to four photos named `assets/foto1.jpg` ... `assets/foto4.jpg`. The "Mis momentos" section appears automatically when at least one exists, and stays hidden otherwise.

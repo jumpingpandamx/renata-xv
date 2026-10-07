@@ -33,7 +33,7 @@ body.locked{overflow:hidden}
 
 /* Cover */
 .cover{position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 20px}
-.cover .fifteen{font-size:250px;line-height:.9;text-shadow:7px 7px 0 var(--pink);margin-top:10px}
+.cover .fifteen{line-height:.9;text-shadow:7px 7px 0 var(--pink)}
 .cover .name{font-size:58px;line-height:1;color:var(--pink);margin-top:10px}
 .datebox{display:flex;align-items:center;gap:18px;margin-top:36px}
 .datebox .bar{width:1.5px;height:50px;background:var(--silver)}
@@ -178,8 +178,85 @@ body.locked{overflow:hidden}
 .bye p{margin:0 0 10px;max-width:300px;font-size:16px;line-height:1.7;color:var(--soft)}
 .bye .script{font-size:48px}
 
+/* ===== Visual storytelling ===== */
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shoot{0%{opacity:0;transform:rotate(145deg) translateX(0)}4%{opacity:1}16%{opacity:0;transform:rotate(145deg) translateX(560px)}100%{opacity:0;transform:rotate(145deg) translateX(560px)}}
+@keyframes tw{0%,100%{opacity:1}50%{opacity:.45}}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-12px) rotate(3deg)}}
+@keyframes fall{0%{transform:translateY(-30px) rotate(0);opacity:0}12%{opacity:.8}100%{transform:translateY(260px) rotate(40deg);opacity:0}}
+@keyframes confetti{0%{opacity:1;transform:translate(0,0) rotate(0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(.6)}}
+@keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 8px rgba(230,184,197,.35))}50%{filter:drop-shadow(0 0 22px rgba(230,184,197,.85))}}
+
+.progress-top{position:fixed;top:0;left:0;right:0;height:3px;z-index:9;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--pink),var(--cream),var(--pink));pointer-events:none}
+.sky .layer{position:absolute;left:0;right:0;top:0;height:150vh;will-change:transform}
+.sky .shoot{position:absolute;width:130px;height:2px;border-radius:2px;background:linear-gradient(90deg,transparent,#fff);opacity:0;animation:shoot 9s linear infinite}
+
+.moon{position:absolute;top:34px;right:22px;width:88px;height:88px;animation:bob 6s ease-in-out infinite,glow 4s ease-in-out infinite;z-index:1}
+.hero15{position:relative;display:inline-block;font-size:250px;line-height:.9;margin-top:10px}
+.cover .fifteen{font-size:inherit;margin:0;position:relative;z-index:1}
+.orbit{position:absolute;left:50%;top:50%;width:1.38em;height:1.38em;margin:-.69em 0 0 -.69em;border:1px dashed rgba(201,204,212,.4);border-radius:50%;animation:spin 38s linear infinite;pointer-events:none}
+.orbit .star{width:.085em;height:.085em;top:-.043em;left:50%;margin-left:-.043em;animation-duration:2s}
+.orbit.o2{width:1.7em;height:1.7em;margin:-.85em 0 0 -.85em;border-color:rgba(230,184,197,.25);animation-duration:60s;animation-direction:reverse}
+.orbit.o2 .star{top:auto;bottom:-.03em;width:.06em;height:.06em}
+
+.constellation{width:100%;max-width:340px;margin:16px auto 0}
+.constellation svg{width:100%;height:auto;overflow:visible}
+.constellation .line{fill:none;stroke:var(--pink);stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;opacity:.75}
+.constellation .cs{transform-box:fill-box;transform-origin:center;transform:scale(0);transition:transform .7s cubic-bezier(.3,1.6,.5,1)}
+.constellation .num{font:500 7px Jost;fill:var(--silver);opacity:0;transition:opacity .6s}
+.constellation.in .line{stroke-dashoffset:0;transition:stroke-dashoffset 3.6s ease .2s}
+.constellation.in .cs{transform:scale(1)}
+.constellation.in .num{opacity:.75}
+.constellation .twk{animation:tw 2.6s ease-in-out infinite}
+.constellation .cap{display:block;margin-top:6px;font:500 10px Jost;letter-spacing:.3em;color:var(--silver);text-align:center}
+
+.timeline::before{transform-origin:top;transform:scaleY(0);transition:transform 2.2s ease .2s}
+.timeline.in::before{transform:scaleY(1)}
+.art{display:block;width:120px;height:76px;margin:0 0 8px -6px;overflow:visible}
+.art *{fill:none;stroke:var(--pink);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.art .fillp{fill:rgba(230,184,197,.18)}
+.art .draw{stroke-dasharray:1;stroke-dashoffset:1}
+.in .art .draw{stroke-dashoffset:0;transition:stroke-dashoffset 2.4s ease .4s}
+.in .art .fillp{animation:tw 3s ease-in-out infinite}
+
+.orn{display:flex;align-items:center;justify-content:center;gap:14px;width:100%;max-width:300px;margin-bottom:6px}
+.orn span{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(230,184,197,.7))}
+.orn span:last-child{background:linear-gradient(270deg,transparent,rgba(230,184,197,.7))}
+.crown{width:64px;height:44px;flex:none;animation:glow 4s ease-in-out infinite}
+.crown *{fill:none;stroke:var(--pink);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+.gallery[hidden]{display:none}
+.gallery{padding:60px 22px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px}
+.gallery h2{margin:0;font-size:44px;line-height:1.05;color:var(--pink)}
+.gallery .label{color:var(--silver);letter-spacing:.3em}
+.polaroids{display:grid;grid-template-columns:1fr 1fr;gap:18px 14px;width:100%;margin-top:10px}
+.polaroids figure{margin:0;padding:8px 8px 26px;background:var(--cream);border-radius:4px;box-shadow:0 14px 30px rgba(0,0,0,.35);transform:rotate(var(--r));transition:transform .4s ease}
+.polaroids figure:nth-child(odd){--r:-3deg}.polaroids figure:nth-child(even){--r:3deg;margin-top:22px}
+.polaroids figure:hover{transform:rotate(0) scale(1.05)}
+.polaroids img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;background:var(--silver)}
+
+.mapbox{width:100%;height:200px;border:0;border-radius:16px;filter:grayscale(.25) contrast(1.05)}
+.cal{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.cal > span{font:600 10px Jost;letter-spacing:.22em;margin-right:4px}
+.cal button,.cal a{padding:10px 14px;border-radius:999px;border:1px solid var(--navy);background:transparent;color:var(--navy)!important;font:500 11px Jost;letter-spacing:.16em;text-decoration:none}
+.cal button:hover,.cal a:hover{background:var(--navy);color:var(--cream)!important}
+
+.info > div{position:relative;overflow:hidden}
+.info > div > *{position:relative;z-index:1}
+.rain{position:absolute!important;inset:0;z-index:0!important;pointer-events:none}
+.rain i{position:absolute;top:0;font-style:normal;font-size:20px;color:var(--pink);opacity:0;animation:fall 7s linear infinite}
+.info .swatch{gap:12px}
+.info .swatch i{position:relative;width:34px;height:34px}
+.info .swatch i::after{content:"";position:absolute;left:-3px;right:-3px;top:50%;height:2px;background:var(--pink);transform:rotate(-45deg)}
+
+.piece{position:fixed;z-index:20;width:10px;height:10px;pointer-events:none;animation:confetti 1.6s ease-out forwards;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.countdown b.bump{animation:bump .4s ease}
+.cover .name,.cover .datebox{position:relative;z-index:1}
+
 @media (prefers-reduced-motion:reduce){
-  .star,.scroll-hint,.seal{animation:none}
+  .star,.scroll-hint,.seal,.orbit,.moon,.shoot,.crown,.rain i{animation:none}
+  .constellation .cs{transition:none;transform:scale(1)}.constellation .line{transition:none;stroke-dashoffset:0}.timeline::before{transition:none;transform:none}.art .draw{stroke-dashoffset:0;transition:none}
   .reveal{transition:none}
   .js .reveal:not(.in){opacity:1;transform:none}
 }
@@ -188,7 +265,7 @@ body.locked{overflow:hidden}
 @media (min-width:900px){
   .page{max-width:none;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);overflow:visible}
   .cover{position:sticky;top:0;height:100vh;min-height:0;background:radial-gradient(ellipse at 50% 40%,#1f2a5e 0,var(--navy) 70%);border-right:1px solid rgba(201,204,212,.15);overflow:hidden}
-  .cover .fifteen{font-size:clamp(260px,22vw,380px);text-shadow:10px 10px 0 var(--pink)}
+  .hero15{font-size:clamp(240px,20vw,340px)}.cover .fifteen{text-shadow:10px 10px 0 var(--pink)}.moon{width:120px;height:120px;top:50px;right:50px}
   .cover .name{font-size:clamp(60px,5vw,84px)}
   .datebox{margin-top:44px}.datebox div{font-size:30px}.datebox .bar{height:62px}
   .cover .star{transform-origin:center;scale:1.4}
@@ -203,6 +280,9 @@ body.locked{overflow:hidden}
   .duo{gap:16px}.duo > div{padding:30px 26px}.duo h3{font-size:30px}.duo small{font-size:15px}
   .rsvp{margin:80px 0 0;padding:44px 40px}.rsvp h2{font-size:52px}
   .bye{padding:110px 0 110px}
+  .gallery{padding:90px 0 20px}.gallery h2{font-size:58px}
+  .mapbox{height:260px}
+  .constellation{max-width:480px}
   .story{padding:120px 0 30px}.story h2{font-size:62px}.story .lead{font-size:19px;max-width:480px}
   .timeline{gap:56px}.timeline li{padding-left:76px}.timeline .num{width:52px;height:52px;font-size:21px}.timeline::before{left:25px}
   .timeline h3{font-size:34px}.timeline p{font-size:18px}
@@ -223,6 +303,7 @@ body.locked{overflow:hidden}
 </head>
 <body class="locked">
 
+<div class="progress-top" id="progressTop"></div>
 <div class="sky" id="sky" aria-hidden="true"></div>
 
 <div class="intro" id="intro">
@@ -249,7 +330,8 @@ body.locked{overflow:hidden}
     <span class="star silver" style="bottom:150px;left:30px;width:30px;height:30px;animation-delay:1.3s"></span>
     <span class="star glitter" style="bottom:90px;right:54px;width:18px;height:18px;animation-duration:2.4s;animation-delay:.2s"></span>
     <span class="label" style="color:var(--silver);letter-spacing:.34em">MIS XV AÑOS</span>
-    <h1 class="serif fifteen" style="margin:10px 0 0">15</h1>
+    <svg class="moon" viewBox="0 0 120 120" aria-hidden="true"><defs><radialGradient id="mg"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient><mask id="mm"><rect width="120" height="120" fill="#fff"/><circle cx="76" cy="50" r="34" fill="#000"/></mask></defs><circle cx="60" cy="60" r="58" fill="url(#mg)"/><circle cx="56" cy="62" r="38" fill="#f4f1ec" mask="url(#mm)"/></svg>
+    <div class="hero15"><div class="orbit"><span class="star glitter"></span></div><div class="orbit o2"><span class="star silver"></span></div><h1 class="serif fifteen">15</h1></div>
     <span class="script name">Renata Muñoz</span>
     <div class="datebox serif"><span class="bar"></span><div><span>SÁB</span><span>14•NOV</span></div><span class="bar"></span></div>
     <span class="label scroll-hint">DESLIZA ↓</span>
@@ -278,15 +360,28 @@ body.locked{overflow:hidden}
     <span class="label reveal">UNA HISTORIA DE QUINCE AÑOS</span>
     <h2 class="script reveal">Quince años, quince estrellas</h2>
     <p class="lead reveal">Cada año fue una estrella nueva en mi cielo. Esta es la noche en la que quiero encenderlas todas contigo.</p>
-    <ol class="timeline">
-      <li class="reveal"><span class="num">I</span><span class="label">CAPÍTULO UNO</span><h3 class="serif">Todo comenzó hace quince años</h3><p>Un día cualquiera, el mundo se hizo un poquito más brillante. Desde entonces, cada risa, cada abrazo y cada sueño han sido pequeños destellos que me trajeron hasta aquí.</p></li>
-      <li class="reveal"><span class="num">II</span><span class="label">CAPÍTULO DOS</span><h3 class="serif">Nunca caminé sola</h3><p>Mi familia y mis amigos han sido mi cielo: la luz que me guía cuando dudo y la que celebra conmigo cuando brillo. Si estás leyendo esta invitación, ya eres parte de mi historia.</p></li>
-      <li class="reveal"><span class="num">III</span><span class="label">CAPÍTULO TRES</span><h3 class="serif">Hoy cierro uno y abro otro</h3><p>A los quince, una niña se asoma a la mujer que quiere ser. Quiero dar ese paso rodeada de las personas que más quiero, entre música, luces y mucha alegría.</p></li>
+    <div class="constellation reveal" id="constellation" aria-hidden="true"></div>
+    <ol class="timeline reveal">
+      <li class="reveal"><span class="num">I</span><svg class="art" viewBox="0 0 120 76" aria-hidden="true"><path class="draw fillp" pathLength="1" d="M60 6l7.5 20.5 21.5 1-17 13.5 6 21L60 50 42 62l6-21L31 27.5l21.5-1z"/><path class="draw" pathLength="1" d="M18 18v10M13 23h10M104 14v8M100 18h8M100 58v8M96 62h8"/></svg><span class="label">CAPÍTULO UNO</span><h3 class="serif">Todo comenzó hace quince años</h3><p>Un día cualquiera, el mundo se hizo un poquito más brillante. Desde entonces, cada risa, cada abrazo y cada sueño han sido pequeños destellos que me trajeron hasta aquí.</p></li>
+      <li class="reveal"><span class="num">II</span><svg class="art" viewBox="0 0 120 76" aria-hidden="true"><path class="draw fillp" pathLength="1" d="M60 58C36 42 42 24 56 30c3 1.5 4 4 4 4s1-2.500 4-4c14-6 20 12-4 28z"/><path class="draw" pathLength="1" d="M14 40l14-16 16 8M106 40L92 24 76 32M26 66l20-12M94 66L74 54M60 8v14"/><circle class="draw" pathLength="1" cx="14" cy="40" r="3"/><circle class="draw" pathLength="1" cx="106" cy="40" r="3"/><circle class="draw" pathLength="1" cx="26" cy="66" r="3"/><circle class="draw" pathLength="1" cx="94" cy="66" r="3"/><circle class="draw" pathLength="1" cx="60" cy="8" r="3"/></svg><span class="label">CAPÍTULO DOS</span><h3 class="serif">Nunca caminé sola</h3><p>Mi familia y mis amigos han sido mi cielo: la luz que me guía cuando dudo y la que celebra conmigo cuando brillo. Si estás leyendo esta invitación, ya eres parte de mi historia.</p></li>
+      <li class="reveal"><span class="num">III</span><svg class="art" viewBox="0 0 120 76" aria-hidden="true"><path class="draw fillp" pathLength="1" d="M28 58L34 26l18 16 8-24 8 24 18-16 6 32z"/><path class="draw" pathLength="1" d="M28 66h64"/><circle class="draw" pathLength="1" cx="34" cy="22" r="3"/><circle class="draw" pathLength="1" cx="60" cy="12" r="3"/><circle class="draw" pathLength="1" cx="86" cy="22" r="3"/><path class="draw" pathLength="1" d="M102 12v10M97 17h10M16 30v8M12 34h8"/></svg><span class="label">CAPÍTULO TRES</span><h3 class="serif">Hoy cierro uno y abro otro</h3><p>A los quince, una niña se asoma a la mujer que quiere ser. Quiero dar ese paso rodeada de las personas que más quiero, entre música, luces y mucha alegría.</p></li>
     </ol>
     <p class="script quote reveal">Cada estrella de esta noche eres tú.</p>
   </section>
 
+  <section class="gallery" id="gallery" hidden>
+    <span class="label reveal">UN VISTAZO A MI HISTORIA</span>
+    <h2 class="script reveal">Mis momentos</h2>
+    <div class="polaroids">
+      <figure class="reveal"><img src="assets/foto1.jpg" alt="Renata" loading="lazy"></figure>
+      <figure class="reveal"><img src="assets/foto2.jpg" alt="Renata" loading="lazy"></figure>
+      <figure class="reveal"><img src="assets/foto3.jpg" alt="Renata" loading="lazy"></figure>
+      <figure class="reveal"><img src="assets/foto4.jpg" alt="Renata" loading="lazy"></figure>
+    </div>
+  </section>
+
   <section class="parents" data-stars="5">
+    <div class="orn reveal" aria-hidden="true"><span></span><svg class="crown" viewBox="0 0 64 44"><path d="M8 34L12 14l12 10 8-16 8 16 12-10 4 20z"/><path d="M8 40h48"/><circle cx="12" cy="11" r="2.200"/><circle cx="32" cy="5" r="2.200"/><circle cx="52" cy="11" r="2.200"/></svg><span></span></div>
     <span class="reveal label">MIS PAPÁS</span>
     <span class="reveal serif p">Marcela Castaños Taboada</span>
     <span class="diamond"></span>
@@ -306,6 +401,8 @@ body.locked{overflow:hidden}
       <h2 class="serif">Salón de Residencial La Antigua</h2>
       <p>Sábado 14 de noviembre de 2026. Las puertas abren a las 8 pm y la fiesta continúa hasta la 1 am. Llega con tiempo para no perderte ningún momento.</p>
       <address>Adolfo López Mateos 636<br>Entrada por Av. 16 de Septiembre</address>
+      <iframe class="mapbox" title="Mapa" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=Residencial+La+Antigua+Adolfo+L%C3%B3pez+Mateos+636&amp;output=embed"></iframe>
+      <div class="cal"><span>AGENDAR</span><a id="gcal" href="#" target="_blank" rel="noopener">GOOGLE</a><button type="button" id="ics">APPLE / OUTLOOK</button></div>
       <div class="foot">
         <span class="serif">8 pm – 1 am</span>
         <a class="btn-map" href="https://www.google.com/maps/search/?api=1&amp;query=Residencial+La+Antigua+Adolfo+L%C3%B3pez+Mateos+636" target="_blank" rel="noopener">MAPA ↗</a>
@@ -313,7 +410,7 @@ body.locked{overflow:hidden}
     </div>
     <div class="info">
       <div class="reveal"><span class="label">VESTIMENTA</span><h3 class="serif">Formal</h3><p>Esta noche merece tu mejor traje o vestido. Ven elegante y listo para bailar.</p><div class="swatch"><i></i><small>El azul es el color de la quinceañera, te pedimos reservarlo para ella.</small></div></div>
-      <div class="reveal"><span class="label">REGALO</span><h3 class="serif">Lluvia de sobres</h3><p>Tu presencia es el mejor regalo. Si deseas tener un detalle conmigo, una lluvia de sobres será recibida con mucho cariño.</p></div>
+      <div class="reveal" id="giftCard"><div class="rain" id="rain" aria-hidden="true"></div><span class="label">REGALO</span><h3 class="serif">Lluvia de sobres</h3><p>Tu presencia es el mejor regalo. Si deseas tener un detalle conmigo, una lluvia de sobres será recibida con mucho cariño.</p></div>
     </div>
   </section>
 
@@ -374,10 +471,92 @@ document.documentElement.classList.add('js');
   } else items.forEach(el => el.classList.add('in'));
 })();
 
+
+// ===== Visual extras =====
+(function () {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const starPts = (r) => { const a = []; for (let i = 0; i < 10; i++) { const rr = i % 2 ? r * .45 : r, t = -Math.PI / 2 + i * Math.PI / 5; a.push((Math.cos(t) * rr).toFixed(2) + ',' + (Math.sin(t) * rr).toFixed(2)); } return a.join(' '); };
+
+  // Constellation of 15 stars that draws itself
+  const pts = [[14,176],[46,146],[78,170],[108,128],[140,154],[166,106],[196,136],[222,86],[248,118],[268,68],[292,100],[306,52],[328,82],[318,22],[290,28]];
+  const cEl = document.getElementById('constellation');
+  let svg = '<svg viewBox="-6 6 352 214"><path class="line" pathLength="1" d="M' + pts.map(p => p.join(' ')).join(' L') + '"/>';
+  pts.forEach((p, i) => {
+    const big = i === 14 || i === 13, r = big ? 11 : 6 + (i % 3);
+    svg += '<g transform="translate(' + p[0] + ' ' + p[1] + ')"><polygon class="cs" style="transition-delay:' + (0.3 + i * 0.22).toFixed(2) + 's" points="' + starPts(r) + '" fill="' + (big ? '#f4f1ec' : '#e6b8c5') + '"><animate attributeName="opacity" values="1;.5;1" dur="' + rnd(2, 3.6).toFixed(1) + 's" begin="' + rnd(0, 2).toFixed(1) + 's" repeatCount="indefinite"/></polygon></g>';
+    svg += '<text class="num" x="' + p[0] + '" y="' + (p[1] + 20) + '" text-anchor="middle" style="transition-delay:' + (1 + i * .2).toFixed(2) + 's">' + (i + 1) + '</text>';
+  });
+  cEl.innerHTML = svg + '</svg><span class="cap">QUINCE ESTRELLAS · QUINCE AÑOS</span>';
+
+  // Shooting stars + two parallax layers in the sky
+  const sky = document.getElementById('sky');
+  [[8, 62, 0], [22, 85, 3.5], [14, 40, 6.5]].forEach(([t, l, d]) => {
+    const e = document.createElement('i'); e.className = 'shoot';
+    e.style.cssText = 'top:' + t + '%;left:' + l + '%;animation-delay:' + d + 's;animation-duration:' + (8 + d) + 's';
+    sky.appendChild(e);
+  });
+  // move existing small stars into two layers
+  const small = Array.from(sky.querySelectorAll('.star'));
+  const layers = [0, 1].map(() => { const l = document.createElement('div'); l.className = 'layer'; sky.appendChild(l); return l; });
+  small.forEach((st, i) => { st.style.top = rnd(0, 100).toFixed(1) + '%'; layers[i % 2].appendChild(st); });
+
+  // Scroll: progress bar + parallax
+  const bar = document.getElementById('progressTop');
+  let ticking = false;
+  const onScroll = () => {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(() => {
+      const y = scrollY, max = document.documentElement.scrollHeight - innerHeight;
+      bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, y / max) : 0) + ')';
+      if (!reduce) { layers[0].style.transform = 'translate3d(0,' + (-y * .06).toFixed(1) + 'px,0)'; layers[1].style.transform = 'translate3d(0,' + (-y * .16).toFixed(1) + 'px,0)'; }
+      ticking = false;
+    });
+  };
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  // Photo gallery shows only if photos exist in /assets
+  const gal = document.getElementById('gallery');
+  const figs = Array.from(gal.querySelectorAll('figure'));
+  let pending = figs.length, ok = 0;
+  figs.forEach(f => {
+    const img = f.querySelector('img');
+    const done = good => { if (!good) f.remove(); else ok++; if (--pending === 0 && ok) gal.hidden = false; };
+    const probe = new Image();
+    probe.onload = () => done(true); probe.onerror = () => done(false);
+    probe.src = img.getAttribute('src');
+  });
+
+  // Falling envelopes in the gift card
+  const rain = document.getElementById('rain');
+  for (let i = 0; i < 9; i++) { const e = document.createElement('i'); e.textContent = '✉'; e.style.cssText = 'left:' + rnd(4, 94).toFixed(0) + '%;animation-delay:' + rnd(0, 7).toFixed(1) + 's;animation-duration:' + rnd(5, 9).toFixed(1) + 's;font-size:' + Math.round(rnd(14, 26)) + 'px'; rain.appendChild(e); }
+
+  // Add to calendar
+  const ev = { title: 'Mis XV · Renata Muñoz', loc: 'Salón de Residencial La Antigua, Adolfo López Mateos 636', desc: 'Entrada por Av. 16 de Septiembre. Vestimenta formal.' };
+  document.getElementById('gcal').href = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(ev.title) + '&dates=20261114T200000/20261115T010000&location=' + encodeURIComponent(ev.loc) + '&details=' + encodeURIComponent(ev.desc);
+  document.getElementById('ics').onclick = () => {
+    const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Renata XV//ES', 'BEGIN:VEVENT', 'UID:renata-xv-2026@renata15.com', 'DTSTAMP:20260101T000000Z', 'DTSTART:20261114T200000', 'DTEND:20261115T010000', 'SUMMARY:' + ev.title, 'LOCATION:' + ev.loc.replace(/,/g, '\\,'), 'DESCRIPTION:' + ev.desc, 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' })); a.download = 'xv-renata.ics'; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  };
+
+  // Confetti of stars
+  window.burst = (x, y, n) => {
+    if (reduce) return;
+    const colors = ['#e6b8c5', '#f4f1ec', '#c9ccd4', '#f2d3dc'];
+    for (let i = 0; i < n; i++) {
+      const e = document.createElement('i'); e.className = 'piece';
+      const ang = rnd(0, Math.PI * 2), d = rnd(60, 220), sz = Math.round(rnd(8, 20));
+      e.style.cssText = 'left:' + x + 'px;top:' + y + 'px;width:' + sz + 'px;height:' + sz + 'px;background:' + colors[i % 4] + ';--dx:' + (Math.cos(ang) * d).toFixed(0) + 'px;--dy:' + (Math.sin(ang) * d + 90).toFixed(0) + 'px;--rot:' + Math.round(rnd(-360, 360)) + 'deg;animation-duration:' + rnd(1.1, 2).toFixed(2) + 's';
+      document.body.appendChild(e); setTimeout(() => e.remove(), 2200);
+    }
+  };
+})();
+
 // Envelope
 const intro = document.getElementById('intro');
 document.getElementById('envelope').addEventListener('click', () => {
   intro.classList.add('opening');
+  { const r = document.getElementById('envelope').getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2, 50); }
   setTimeout(() => { intro.classList.add('gone'); document.body.classList.remove('locked'); }, 750);
   if (song.src) song.play().then(setPlaying).catch(() => {});
 });
@@ -397,7 +576,8 @@ function tick() {
   document.getElementById('cd-d').textContent = pad(Math.floor(diff / 864e5));
   document.getElementById('cd-h').textContent = pad(Math.floor(diff / 36e5) % 24);
   document.getElementById('cd-m').textContent = pad(Math.floor(diff / 6e4) % 60);
-  document.getElementById('cd-s').textContent = pad(Math.floor(diff / 1e3) % 60);
+  const sEl = document.getElementById('cd-s'), sv = pad(Math.floor(diff / 1e3) % 60);
+  if (sEl.textContent !== sv) { sEl.textContent = sv; sEl.classList.remove('bump'); void sEl.offsetWidth; sEl.classList.add('bump'); }
 }
 tick(); setInterval(tick, 1000);
 
@@ -427,6 +607,7 @@ form.addEventListener('submit', async e => {
     ? 'Confirmaste ' + passes + (passes === 1 ? ' pase' : ' pases') + '. Nos vemos el 14 de noviembre.'
     : 'Te vamos a extrañar. Gracias por avisarnos.';
   rsvp.classList.add('sent');
+  if (attend === 'si') { const r = rsvp.getBoundingClientRect(); burst(r.left + r.width / 2, Math.min(Math.max(r.top + 120, 120), innerHeight - 80), 70); }
 });
 document.getElementById('edit').onclick = () => rsvp.classList.remove('sent');
 </script>
