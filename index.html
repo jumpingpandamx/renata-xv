@@ -125,6 +125,65 @@ body.locked{overflow:hidden}
 .intro .tap{font:500 12px Jost;letter-spacing:.24em}
 .intro .label{color:var(--silver)}
 
+/* Sky: sparkles that follow you the whole page */
+.sky{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.page{position:relative;z-index:1}
+.card,.story,.parents,.details,.rsvp,.bye{position:relative}
+[data-stars] > :not(.star){position:relative;z-index:1}
+.sec-star{z-index:0;filter:opacity(.5)}
+.reveal{transition:opacity .9s ease,transform .9s ease}
+.js .reveal:not(.in){opacity:0;transform:translateY(26px)}
+.center{text-align:center}
+
+/* Story */
+.story{padding:90px 28px 30px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px}
+.story .label{color:var(--silver);letter-spacing:.3em}
+.story h2{margin:0;font-size:46px;line-height:1.05;color:var(--pink);text-wrap:balance}
+.story .lead{margin:6px 0 0;font-size:17px;line-height:1.7;color:var(--soft);max-width:340px;text-wrap:pretty}
+.timeline{list-style:none;margin:34px 0 0;padding:0;position:relative;text-align:left;display:flex;flex-direction:column;gap:46px;width:100%}
+.timeline::before{content:"";position:absolute;left:21px;top:10px;bottom:10px;width:1.5px;background:linear-gradient(var(--pink),rgba(201,204,212,.2))}
+.timeline li{position:relative;padding-left:66px}
+.timeline .num{position:absolute;left:0;top:0;width:44px;height:44px;border-radius:50%;background:var(--navy2);border:1.5px solid var(--pink);display:flex;align-items:center;justify-content:center;font:400 18px 'DM Serif Display',serif;color:var(--pink);z-index:1}
+.timeline .label{color:var(--pink);display:block;margin:2px 0 8px;font-size:10px}
+.timeline h3{margin:0 0 10px;font-size:28px;line-height:1.1}
+.timeline p{margin:0;font-size:16px;line-height:1.75;color:var(--soft);text-wrap:pretty}
+.quote{margin:26px 0 0;font-size:40px;line-height:1.15;color:var(--cream);text-wrap:balance}
+.quote small{display:block;margin-top:14px;font:500 10px Jost;letter-spacing:.3em;color:var(--silver)}
+
+/* Bigger sections */
+.parents{padding:80px 32px 30px;gap:14px}
+.parents .p{font-size:26px}
+.parents .lead{font-size:17px}
+.parents .full{font-size:54px;margin-top:4px}
+.details{padding:70px 20px 0;gap:16px}
+.chapter{text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px;padding:0 10px 18px}
+.chapter .label{color:var(--silver);letter-spacing:.3em}
+.chapter h2{margin:0;font-size:46px;line-height:1.05;color:var(--pink)}
+.chapter p{margin:0;font-size:17px;line-height:1.7;color:var(--soft);max-width:340px;text-wrap:pretty}
+.venue{padding:32px 26px;gap:14px}
+.venue h2{font-size:32px}
+.venue p{margin:0;font-size:15.5px;line-height:1.65}
+.venue address{font-size:16px}
+.info{display:flex;flex-direction:column;gap:16px}
+.info > div{padding:30px 26px;border-radius:24px;border:1px solid rgba(201,204,212,.3);background:rgba(255,255,255,.04);display:flex;flex-direction:column;gap:10px}
+.info .label{color:var(--pink);font-size:10px;letter-spacing:.24em}
+.info h3{margin:0;font-size:32px;line-height:1.05}
+.info p{margin:0;font-size:16px;line-height:1.7;color:var(--soft);text-wrap:pretty}
+.info .swatch{margin-top:6px}
+.info .swatch small{font-size:13px;color:var(--soft)}
+.rsvp{margin-top:70px;padding:38px 24px}
+.rsvp h2{font-size:46px}
+.rsvp .lead{margin:0 0 6px;text-align:center;font-size:15.5px;line-height:1.65;color:var(--soft);text-wrap:pretty}
+.bye{padding:80px 28px 90px;gap:10px}
+.bye p{margin:0 0 10px;max-width:300px;font-size:16px;line-height:1.7;color:var(--soft)}
+.bye .script{font-size:48px}
+
+@media (prefers-reduced-motion:reduce){
+  .star,.scroll-hint,.seal{animation:none}
+  .reveal{transition:none}
+  .js .reveal:not(.in){opacity:1;transform:none}
+}
+
 /* Desktop: fixed cover on the left, scrolling details on the right */
 @media (min-width:900px){
   .page{max-width:none;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);overflow:visible}
@@ -143,7 +202,17 @@ body.locked{overflow:hidden}
   .venue{padding:36px 34px}.venue h2{font-size:36px}.venue address{font-size:17px}.venue .foot span{font-size:26px}
   .duo{gap:16px}.duo > div{padding:30px 26px}.duo h3{font-size:30px}.duo small{font-size:15px}
   .rsvp{margin:80px 0 0;padding:44px 40px}.rsvp h2{font-size:52px}
-  .bye{padding:80px 0}
+  .bye{padding:110px 0 110px}
+  .story{padding:120px 0 30px}.story h2{font-size:62px}.story .lead{font-size:19px;max-width:480px}
+  .timeline{gap:56px}.timeline li{padding-left:76px}.timeline .num{width:52px;height:52px;font-size:21px}.timeline::before{left:25px}
+  .timeline h3{font-size:34px}.timeline p{font-size:18px}
+  .quote{font-size:54px}
+  .parents{padding:110px 0 40px}.parents .p{font-size:32px}.parents .full{font-size:72px}
+  .details{padding:90px 0 0}.chapter h2{font-size:62px}.chapter p{font-size:19px;max-width:480px}
+  .venue{padding:42px 40px}.venue h2{font-size:40px}.venue p{font-size:17px}
+  .info > div{padding:38px 36px}.info h3{font-size:38px}.info p{font-size:17px}
+  .rsvp .lead{font-size:17px}
+  .bye p{font-size:18px;max-width:420px}
   .bye .script{font-size:52px}
   .envelope{transform:scale(1.3)}.intro.opening .envelope{transform:scale(1.3) translateY(-30px)}
   .intro{gap:56px}.intro .script{font-size:64px}
@@ -153,6 +222,8 @@ body.locked{overflow:hidden}
 </style>
 </head>
 <body class="locked">
+
+<div class="sky" id="sky" aria-hidden="true"></div>
 
 <div class="intro" id="intro">
   <span class="star glitter" style="top:12%;right:13%;width:34px;height:34px"></span>
@@ -203,33 +274,52 @@ body.locked{overflow:hidden}
     <audio id="song" src="assets/cancion.mp3" preload="none" loop></audio>
   </section>
 
-  <section class="parents">
-    <span class="label">MIS PAPÁS</span>
-    <span class="serif p">Marcela Castaños Taboada</span>
-    <span class="diamond"></span>
-    <span class="serif p">Jorge Humberto Muñoz Zazueta</span>
-    <span class="lead">te invitan a celebrar los XV años de</span>
-    <span class="script full">Renata Muñoz Castaños</span>
+  <section class="story" data-stars="7">
+    <span class="label reveal">UNA HISTORIA DE QUINCE AÑOS</span>
+    <h2 class="script reveal">Quince años, quince estrellas</h2>
+    <p class="lead reveal">Cada año fue una estrella nueva en mi cielo. Esta es la noche en la que quiero encenderlas todas contigo.</p>
+    <ol class="timeline">
+      <li class="reveal"><span class="num">I</span><span class="label">CAPÍTULO UNO</span><h3 class="serif">Todo comenzó hace quince años</h3><p>Un día cualquiera, el mundo se hizo un poquito más brillante. Desde entonces, cada risa, cada abrazo y cada sueño han sido pequeños destellos que me trajeron hasta aquí.</p></li>
+      <li class="reveal"><span class="num">II</span><span class="label">CAPÍTULO DOS</span><h3 class="serif">Nunca caminé sola</h3><p>Mi familia y mis amigos han sido mi cielo: la luz que me guía cuando dudo y la que celebra conmigo cuando brillo. Si estás leyendo esta invitación, ya eres parte de mi historia.</p></li>
+      <li class="reveal"><span class="num">III</span><span class="label">CAPÍTULO TRES</span><h3 class="serif">Hoy cierro uno y abro otro</h3><p>A los quince, una niña se asoma a la mujer que quiere ser. Quiero dar ese paso rodeada de las personas que más quiero, entre música, luces y mucha alegría.</p></li>
+    </ol>
+    <p class="script quote reveal">Cada estrella de esta noche eres tú.</p>
   </section>
 
-  <section class="details">
-    <div class="venue">
+  <section class="parents" data-stars="5">
+    <span class="reveal label">MIS PAPÁS</span>
+    <span class="reveal serif p">Marcela Castaños Taboada</span>
+    <span class="diamond"></span>
+    <span class="reveal serif p">Jorge Humberto Muñoz Zazueta</span>
+    <span class="reveal lead">te invitan a celebrar los XV años de</span>
+    <span class="reveal script full">Renata Muñoz Castaños</span>
+  </section>
+
+  <section class="details" data-stars="6">
+    <div class="chapter reveal">
+      <span class="label">EL GRAN FINAL · CAPÍTULO CUATRO</span>
+      <h2 class="script">Y esta es la noche</h2>
+      <p>El sábado 14 de noviembre se encienden las luces. Será una noche de música, baile, fotos y abrazos que quiero recordar toda la vida, y no sería lo mismo sin ti.</p>
+    </div>
+    <div class="venue reveal">
       <div class="row"><span class="label">¿DÓNDE Y CUÁNDO?</span><span class="label">RECEPCIÓN</span></div>
       <h2 class="serif">Salón de Residencial La Antigua</h2>
+      <p>Sábado 14 de noviembre de 2026. Las puertas abren a las 8 pm y la fiesta continúa hasta la 1 am. Llega con tiempo para no perderte ningún momento.</p>
       <address>Adolfo López Mateos 636<br>Entrada por Av. 16 de Septiembre</address>
       <div class="foot">
         <span class="serif">8 pm – 1 am</span>
         <a class="btn-map" href="https://www.google.com/maps/search/?api=1&amp;query=Residencial+La+Antigua+Adolfo+L%C3%B3pez+Mateos+636" target="_blank" rel="noopener">MAPA ↗</a>
       </div>
     </div>
-    <div class="duo">
-      <div><span class="label">VESTIMENTA</span><h3 class="serif">Formal</h3><div class="swatch"><i></i><small>El color azul está reservado</small></div></div>
-      <div><span class="label">REGALO</span><h3 class="serif">Lluvia de sobres</h3><small>Tu presencia es el mejor regalo</small></div>
+    <div class="info">
+      <div class="reveal"><span class="label">VESTIMENTA</span><h3 class="serif">Formal</h3><p>Esta noche merece tu mejor traje o vestido. Ven elegante y listo para bailar.</p><div class="swatch"><i></i><small>El azul es el color de la quinceañera, te pedimos reservarlo para ella.</small></div></div>
+      <div class="reveal"><span class="label">REGALO</span><h3 class="serif">Lluvia de sobres</h3><p>Tu presencia es el mejor regalo. Si deseas tener un detalle conmigo, una lluvia de sobres será recibida con mucho cariño.</p></div>
     </div>
   </section>
 
-  <section class="rsvp" id="rsvp">
+  <section class="rsvp reveal" id="rsvp">
     <h2 class="script">Confirma tu asistencia</h2>
+    <p class="lead">Ayúdanos a preparar la noche. Cuéntanos si nos acompañarás y cuántos pases vas a usar.</p>
     <form id="rsvpForm">
       <input id="name" name="nombre" placeholder="Nombre completo" autocomplete="name" required>
       <div class="passes"><span>Pases</span><div><button type="button" id="minus" aria-label="Menos">−</button><output id="passes">2</output><button type="button" id="plus" aria-label="Más">+</button></div></div>
@@ -240,7 +330,7 @@ body.locked{overflow:hidden}
     <span class="note">FAVOR DE RESPETAR LOS PASES ASIGNADOS</span>
   </section>
 
-  <footer class="bye"><span class="script">¡Nos vemos pronto!</span><span class="label">RENATA · XV</span></footer>
+  <footer class="bye" data-stars="5"><p class="reveal">Gracias por ser parte de mi historia y por brillar conmigo en esta noche tan especial.</p><span class="script reveal">¡Nos vemos pronto!</span><span class="label">RENATA · XV</span></footer>
   </div>
 </main>
 
@@ -249,6 +339,40 @@ body.locked{overflow:hidden}
 // Leave empty to only show the thank-you message.
 const RSVP_ENDPOINT = "";
 const EVENT_DATE = new Date(2026, 10, 14, 20, 0, 0); // 14 nov 2026, 8:00 pm
+
+// Sparkles everywhere
+document.documentElement.classList.add('js');
+(function () {
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const mk = (cls, size, style) => {
+    const el = document.createElement('span');
+    el.className = 'star ' + cls;
+    el.style.cssText = 'width:' + size + 'px;height:' + size + 'px;animation-duration:' + rnd(2, 3.8).toFixed(2) + 's;animation-delay:' + rnd(0, 3).toFixed(2) + 's;' + style;
+    return el;
+  };
+  // Viewport-wide field of tiny stars that stays while you scroll
+  const sky = document.getElementById('sky');
+  for (let i = 0; i < 38; i++) {
+    sky.appendChild(mk(Math.random() < .55 ? 'silver' : 'glitter', Math.round(rnd(5, 14)), 'left:' + rnd(1, 97).toFixed(1) + '%;top:' + rnd(1, 97).toFixed(1) + '%;opacity:' + rnd(.35, .9).toFixed(2)));
+  }
+  // Bigger glitter stars along the edges of each section
+  document.querySelectorAll('[data-stars]').forEach(sec => {
+    const n = +sec.dataset.stars, h = 100 / n;
+    for (let i = 0; i < n; i++) {
+      const left = i % 2 ? rnd(80, 94) : rnd(1, 12);
+      const top = i * h + rnd(2, h - 6);
+      const star = mk(Math.random() < .6 ? 'glitter' : 'silver', Math.round(rnd(12, 32)), 'left:' + left.toFixed(1) + '%;top:' + top.toFixed(1) + '%');
+      star.classList.add('sec-star');
+      sec.appendChild(star);
+    }
+  });
+  // Fade-in on scroll
+  const items = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .15, rootMargin: '0px 0px -6% 0px' });
+    items.forEach(el => io.observe(el));
+  } else items.forEach(el => el.classList.add('in'));
+})();
 
 // Envelope
 const intro = document.getElementById('intro');
