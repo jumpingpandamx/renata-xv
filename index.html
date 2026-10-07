@@ -466,7 +466,7 @@ body.locked{overflow:hidden}
 <script>
 // Where RSVP answers are sent. Paste a Formspree (or similar) endpoint, e.g. "https://formspree.io/f/xxxxxx".
 // Leave empty to only show the thank-you message.
-const RSVP_ENDPOINT = "";
+const RSVP_ENDPOINT = "https://formspree.io/f/mzederqz";
 const EVENT_DATE = new Date(2026, 10, 14, 20, 0, 0); // 14 nov 2026, 8:00 pm
 
 // Sparkles everywhere
@@ -628,11 +628,13 @@ form.querySelectorAll('.attend button').forEach(b => b.onclick = () => {
 });
 form.addEventListener('submit', async e => {
   e.preventDefault(); if (send.disabled) return;
-  const data = { nombre: nameEl.value.trim(), pases: passes, asistira: attend };
+  const data = { nombre: nameEl.value.trim(), pases: passes, asistira: attend === 'si' ? 'Sí asistirá' : 'No podrá asistir', _subject: 'RSVP XV Renata: ' + nameEl.value.trim() };
   if (RSVP_ENDPOINT) {
     send.disabled = true; send.textContent = 'ENVIANDO…';
-    try { await fetch(RSVP_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) }); } catch (_) {}
+    let ok = false;
+    try { const r = await fetch(RSVP_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) }); ok = r.ok; } catch (_) {}
     send.textContent = 'ENVIAR'; send.disabled = false;
+    if (!ok) { send.textContent = 'NO SE ENVIÓ · REINTENTAR'; return; }
   }
   document.getElementById('thanksTitle').textContent = '¡Gracias, ' + data.nombre + '!';
   document.getElementById('thanksText').textContent = attend === 'si'
