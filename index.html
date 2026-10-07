@@ -116,10 +116,7 @@ body.locked{overflow:hidden}
 .rsvp form{display:flex;flex-direction:column;gap:12px}
 .rsvp input{padding:15px 16px;border:1px solid rgba(201,204,212,.35);border-radius:12px;background:rgba(255,255,255,.06);font:400 16px Jost;color:var(--cream);outline:none}
 .rsvp input::placeholder{color:rgba(244,241,236,.55)}
-.passes{display:flex;align-items:center;justify-content:space-between;padding:8px 8px 8px 16px;border:1px solid rgba(201,204,212,.35);border-radius:12px}
-.passes div{display:flex;align-items:center;gap:6px}
-.passes button{width:36px;height:36px;border-radius:50%;border:1px solid var(--silver);background:transparent;color:var(--cream);font-size:18px}
-.passes output{width:28px;text-align:center;font:400 20px 'DM Serif Display',serif}
+.legend{margin:0;display:flex;align-items:center;justify-content:center;gap:10px;padding:13px 14px;border:1px dashed rgba(230,184,197,.55);border-radius:12px;background:rgba(230,184,197,.08);font:500 12px Jost;letter-spacing:.14em;text-transform:uppercase;color:var(--pink);text-align:center}
 .attend{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .attend button{padding:14px 0;border-radius:12px;border:1px solid var(--pink);background:transparent;color:var(--cream);font:500 14px Jost}
 .attend button[aria-pressed="true"]{background:var(--pink);color:var(--navy)}
@@ -448,15 +445,15 @@ body.locked{overflow:hidden}
 
   <section class="rsvp reveal" id="rsvp">
     <h2 class="script">Confirma tu asistencia</h2>
-    <p class="lead">Ayúdanos a preparar la noche. Cuéntanos si nos acompañarás y cuántos pases vas a usar.</p>
+    <p class="lead">Ayúdanos a preparar la noche. Cuéntanos si nos acompañarás.</p>
     <form id="rsvpForm">
       <input id="name" name="nombre" placeholder="Nombre completo" autocomplete="name" required>
-      <div class="passes"><span>Pases</span><div><button type="button" id="minus" aria-label="Menos">−</button><output id="passes">2</output><button type="button" id="plus" aria-label="Más">+</button></div></div>
+      <p class="legend"><span class="diamond"></span> Pase individual · válido para una persona</p>
       <div class="attend"><button type="button" data-v="si" aria-pressed="false">Sí asistiré</button><button type="button" data-v="no" aria-pressed="false">No podré ir</button></div>
       <button class="send" type="submit" disabled>ENVIAR</button>
     </form>
     <div class="thanks"><h3 class="serif" id="thanksTitle"></h3><p id="thanksText"></p><button type="button" id="edit">Editar respuesta</button></div>
-    <span class="note">FAVOR DE RESPETAR LOS PASES ASIGNADOS</span>
+    <span class="note">FAVOR DE RESPETAR EL PASE INDIVIDUAL</span>
   </section>
 
   <footer class="bye" data-stars="5"><p class="reveal">Gracias por ser parte de mi historia y por brillar conmigo en esta noche tan especial.</p><span class="script reveal">¡Nos vemos pronto!</span><span class="label">RENATA · XV</span><p class="credit">Hecho en México con amor <span class="flag">🇲🇽</span> por <a href="https://moment0.mx" target="_blank" rel="noopener">Moment0</a></p></footer>
@@ -615,12 +612,10 @@ tick(); setInterval(tick, 1000);
 
 // RSVP
 const form = document.getElementById('rsvpForm'), rsvp = document.getElementById('rsvp');
-const nameEl = document.getElementById('name'), passesEl = document.getElementById('passes'), send = form.querySelector('.send');
-let passes = 2, attend = '';
+const nameEl = document.getElementById('name'), send = form.querySelector('.send');
+let attend = '';
 const check = () => { send.disabled = !(nameEl.value.trim() && attend); };
 nameEl.addEventListener('input', check);
-document.getElementById('minus').onclick = () => { passes = Math.max(1, passes - 1); passesEl.textContent = passes; };
-document.getElementById('plus').onclick = () => { passes = Math.min(6, passes + 1); passesEl.textContent = passes; };
 form.querySelectorAll('.attend button').forEach(b => b.onclick = () => {
   attend = b.dataset.v;
   form.querySelectorAll('.attend button').forEach(x => x.setAttribute('aria-pressed', x === b));
@@ -628,7 +623,7 @@ form.querySelectorAll('.attend button').forEach(b => b.onclick = () => {
 });
 form.addEventListener('submit', async e => {
   e.preventDefault(); if (send.disabled) return;
-  const data = { nombre: nameEl.value.trim(), pases: passes, asistira: attend === 'si' ? 'Sí asistirá' : 'No podrá asistir', _subject: 'RSVP XV Renata: ' + nameEl.value.trim() };
+  const data = { nombre: nameEl.value.trim(), asistira: attend === 'si' ? 'Sí asistirá' : 'No podrá asistir', _subject: 'RSVP XV Renata: ' + nameEl.value.trim() };
   if (RSVP_ENDPOINT) {
     send.disabled = true; send.textContent = 'ENVIANDO…';
     let ok = false;
@@ -638,7 +633,7 @@ form.addEventListener('submit', async e => {
   }
   document.getElementById('thanksTitle').textContent = '¡Gracias, ' + data.nombre + '!';
   document.getElementById('thanksText').textContent = attend === 'si'
-    ? 'Confirmaste ' + passes + (passes === 1 ? ' pase' : ' pases') + '. Nos vemos el 14 de noviembre.'
+    ? 'Confirmaste tu asistencia. Nos vemos el 14 de noviembre.'
     : 'Te vamos a extrañar. Gracias por avisarnos.';
   rsvp.classList.add('sent');
   if (attend === 'si') { const r = rsvp.getBoundingClientRect(); burst(r.left + r.width / 2, Math.min(Math.max(r.top + 120, 120), innerHeight - 80), 70); }
