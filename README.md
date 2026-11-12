@@ -24,7 +24,8 @@ If it's left empty, guests only see the thank-you message.
 
 ## Guest photos ("Comparte tus fotos")
 Guests upload photos from their phones, with no account needed, and everyone sees them appear in a live
-gallery and slideshow. Photos are stored in Cloudinary (free plan).
+slider on the page (newest first, auto-advancing, swipeable; tap a photo to see it full screen).
+Photos are stored in Cloudinary (free plan).
 
 Setup (about 5 minutes):
 1. Create a free account at https://cloudinary.com.
