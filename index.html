@@ -317,6 +317,20 @@ body.locked{overflow:hidden}
 .sl-meta{width:100%;display:flex;align-items:baseline;justify-content:space-between;gap:10px;min-height:36px;margin-top:4px}
 .sl-meta .script{font-size:28px;color:var(--pink);text-align:left}
 .sl-meta .label{font-size:10px;letter-spacing:.2em;margin-left:auto}
+.allbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:4px;padding:15px 0;border-radius:999px;border:1px solid var(--pink);background:transparent;color:var(--pink);font:500 11px Jost;letter-spacing:.2em;transition:background .2s}
+.allbtn:hover{background:rgba(230,184,197,.12)}
+.allview[hidden]{display:none!important}
+.allview{position:fixed;inset:0;z-index:25;background:var(--navy);overflow-y:auto;overscroll-behavior:contain}
+.all-bar{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:rgba(20,28,61,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid rgba(201,204,212,.15)}
+.all-bar > div{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.all-bar .script{font-size:32px;line-height:1.1;color:var(--pink)}
+.all-bar .label{font-size:10px;color:var(--silver)}
+.all-bar button{flex:none;width:40px;height:40px;border-radius:50%;border:1px solid rgba(201,204,212,.35);background:transparent;color:var(--cream);font-size:14px}
+.all-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px 4px 40px;max-width:1200px;margin:0 auto}
+.all-grid button{position:relative;padding:0;border:0;aspect-ratio:1;overflow:hidden;background:rgba(255,255,255,.06);border-radius:4px;cursor:zoom-in}
+.all-grid img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .3s ease}
+.all-grid button:hover img{transform:scale(1.05)}
+@media (min-width:700px){.all-grid{grid-template-columns:repeat(5,1fr);gap:6px;padding:6px 6px 60px}}
 .memories .empty{margin:6px 0 0;font-size:14px;line-height:1.6;color:var(--silver)}
 
 /* Slideshow */
@@ -419,6 +433,11 @@ body.locked{overflow:hidden}
   </button>
   <span class="script">Renata</span>
   <span class="tap">TOCA PARA ABRIR</span>
+</div>
+
+<div class="allview" id="allView" hidden role="dialog" aria-modal="true" aria-label="Todas las fotos">
+  <div class="all-bar"><div><span class="script">Todas las fotos</span><span class="label" id="allN"></span></div><button type="button" id="allClose" aria-label="Cerrar">✕</button></div>
+  <div class="all-grid" id="allGrid"></div>
 </div>
 
 <div class="show" id="show" hidden role="dialog" aria-modal="true" aria-label="Presentación de fotos">
@@ -557,6 +576,7 @@ body.locked{overflow:hidden}
       <span class="sl-new" id="slNew">✦ NUEVA FOTO</span>
     </div>
     <div class="sl-meta" id="slMeta" hidden><span class="script" id="slCap"></span><span class="label" id="slN"></span></div>
+    <button type="button" class="allbtn" id="allBtn" hidden><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg><span id="allBtnTxt">VER TODAS LAS FOTOS</span></button>
     <p class="empty" id="photoEmpty">Aún no hay fotos. ¡Comparte el primer momento de la noche!</p>
   </section>
 
@@ -800,10 +820,35 @@ document.getElementById('edit').onclick = () => rsvp.classList.remove('sent');
     meta();
   }
   function badge() { slNew.classList.add('on'); clearTimeout(newT); newT = setTimeout(() => slNew.classList.remove('on'), 4000); }
+  // "Ver todas las fotos": full-screen grid of every photo, newest first; tap one to enlarge
+  const allBtn = $('allBtn'), allBtnTxt = $('allBtnTxt'), allView = $('allView'), allGrid = $('allGrid'), allN = $('allN');
+  let allKey = '';
+  function renderAll() {
+    allN.textContent = photos.length + (photos.length === 1 ? ' FOTO' : ' FOTOS');
+    const key = photos.map(p => p.public_id).join('|');
+    if (key === allKey) return;
+    allKey = key; allGrid.textContent = '';
+    photos.forEach((p, i) => {
+      const b = document.createElement('button'), im = new Image();
+      b.type = 'button'; b.setAttribute('aria-label', 'Ampliar foto ' + (i + 1) + (p.by ? ' de ' + p.by : ''));
+      im.alt = ''; im.loading = 'lazy'; im.decoding = 'async';
+      im.src = url(p, 'c_fill,g_auto,w_300,h_300,f_auto,q_auto');
+      b.onclick = () => openShow(i);
+      b.appendChild(im); allGrid.appendChild(b);
+    });
+  }
+  function openAll() { renderAll(); allView.hidden = false; allView.scrollTop = 0; document.body.classList.add('locked'); }
+  function closeAll() { allView.hidden = true; document.body.classList.remove('locked'); }
+  allBtn.onclick = openAll;
+  $('allClose').onclick = closeAll;
+  addEventListener('keydown', e => { if (e.key === 'Escape' && !allView.hidden && show.hidden) closeAll(); });
+
   function renderSlider(fresh, jump) {
     const n = photos.length;
     countEl.textContent = n ? n + (n === 1 ? ' FOTO COMPARTIDA' : ' FOTOS COMPARTIDAS') : '';
     empty.hidden = n > 0; slider.hidden = slMeta.hidden = head.hidden = !n;
+    allBtn.hidden = n < 2; allBtnTxt.textContent = 'VER TODAS LAS FOTOS (' + n + ')';
+    if (!allView.hidden) renderAll();
     const key = photos.map(p => p.public_id).join('|');
     if (key !== trackKey) {
       const curId = trackKey && track.children[cur] ? track.children[cur].dataset.id : null;
@@ -958,7 +1003,7 @@ document.getElementById('edit').onclick = () => rsvp.classList.remove('sent');
   function closeShow() {
     show.hidden = true; clearInterval(timer); tok++;
     if (photos.length) go(si, false);
-    document.body.classList.remove('locked');
+    if (allView.hidden) document.body.classList.remove('locked'); // stay in the grid if we came from it
     if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
     if (location.hash === '#proyeccion') history.replaceState(null, '', location.pathname + location.search);
   }
